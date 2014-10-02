@@ -1,0 +1,12 @@
+package ${data.packageName};
+
+/**
+* Generated aspect by JBoilDown
+*
+* DO NOT MANUALY CHANGE THIS FILE, IT WILL BE OVERIDEN ON COMPILATION
+*/
+privileged aspect ${data.className}_jdb {
+#parse("template/getter.vm")
+#parse("template/setter.vm")
+
+}

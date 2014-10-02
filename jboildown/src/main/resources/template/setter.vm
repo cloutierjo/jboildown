@@ -1,0 +1,13 @@
+#foreach($setter in $data.setters)
+
+#if($setter.javadoc)
+	/**
+	 * Set ${setter.javadoc}
+	 *
+	 * @param ${setter.fieldName} ${setter.javadoc}
+	 */
+#end
+	public void ${data.className}.set${setter.fieldNamePascalCase}(${setter.typeName} ${setter.fieldName}) {
+		this.${setter.fieldName} = ${setter.fieldName};
+	}
+#end

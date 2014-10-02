@@ -1,0 +1,13 @@
+#foreach($getter in $data.getters)
+
+#if($getter.javadoc)
+	/**
+	 * #if($getter.typeName != "boolean" && $getter.typeName != "Boolean" )Get#{else}Is#{end} ${getter.javadoc}
+	 *
+	 * @return ${getter.javadoc}
+	 */
+#end
+	public ${getter.typeName} ${data.className}.#if($getter.typeName != "boolean" && $getter.typeName != "Boolean" )get#{else}is#{end}${getter.fieldNamePascalCase}() {
+		return ${getter.fieldName};
+	}
+#end
