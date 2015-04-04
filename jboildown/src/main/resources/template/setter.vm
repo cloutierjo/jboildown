@@ -1,4 +1,4 @@
-#foreach($setter in $data.setters)
+#foreach($setter in $SetterExtractor)
 
 #if($setter.javadoc)
 	/**
@@ -7,7 +7,7 @@
 	 * @param ${setter.fieldName} ${setter.javadoc}
 	 */
 #end
-	public void ${data.className}.set${setter.fieldNamePascalCase}(${setter.typeName} ${setter.fieldName}) {
+	public void ${baseData.className}.set${setter.fieldNamePascalCase}(${setter.typeName} ${setter.fieldName}) {
 		this.${setter.fieldName} = ${setter.fieldName};
 	}
 #end

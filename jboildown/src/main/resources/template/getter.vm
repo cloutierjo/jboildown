@@ -1,4 +1,4 @@
-#foreach($getter in $data.getters)
+#foreach($getter in $GetterExtractor)
 
 #if($getter.javadoc)
 	/**
@@ -7,7 +7,7 @@
 	 * @return ${getter.javadoc}
 	 */
 #end
-	public ${getter.typeName} ${data.className}.#if($getter.typeName != "boolean" && $getter.typeName != "Boolean" )get#{else}is#{end}${getter.fieldNamePascalCase}() {
+	public ${getter.typeName} ${baseData.className}.#if($getter.typeName != "boolean" && $getter.typeName != "Boolean" )get#{else}is#{end}${getter.fieldNamePascalCase}() {
 		return ${getter.fieldName};
 	}
 #end

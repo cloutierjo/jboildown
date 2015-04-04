@@ -1,26 +1,52 @@
 package net.jcs.jboildown.data;
 
+import java.util.Collection;
 import java.util.HashSet;
-import java.util.Set;
 
 public class Data {
-	public String packageName;
-	public String className;
-	public Set<GSetterData> getters = new HashSet<GSetterData>();
-	public Set<GSetterData> setters = new HashSet<GSetterData>();
+	private String packageName;
+	private String className;
+	private Collection<String> imports;
+
+	public Data() {
+		imports = new HashSet<String>();
+	}
 
 	public String getPackageName() {
 		return packageName;
 	}
+
 	public String getClassName() {
 		return className;
 	}
-	public Set<GSetterData> getGetters() {
-		return getters;
+
+	public void clear() {
+		packageName = "";
+		className = "";
+		imports.clear();
 	}
-	
-	public Set<GSetterData> getSetters() {
-		return setters;
+
+	public Collection<String> getImports() {
+		return imports;
 	}
-	
+
+	public void setImports(Collection<String> imports) {
+		this.imports = imports;
+	}
+
+	public boolean addImport(String e) {
+		return imports.add(e);
+	}
+
+	public boolean addAllImport(Collection<? extends String> c) {
+		return imports.addAll(c);
+	}
+
+	public void setPackageName(String packageName) {
+		this.packageName = packageName;
+	}
+
+	public void setClassName(String className) {
+		this.className = className;
+	}
 }

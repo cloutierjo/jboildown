@@ -1,11 +1,14 @@
-package ${data.packageName};
+package ${baseData.packageName};
 
+#foreach($import in $baseData.imports)
+import ${import};
+#end
 /**
 * Generated aspect by JBoilDown
 *
 * DO NOT MANUALY CHANGE THIS FILE, IT WILL BE OVERIDEN ON COMPILATION
 */
-privileged aspect ${data.className}_jdb {
+privileged aspect ${baseData.className}_jdb {
 #parse("template/getter.vm")
 #parse("template/setter.vm")
 

@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.SOURCE)
-@Target({ElementType.FIELD,ElementType.TYPE,ElementType.PACKAGE})
+@Target({ ElementType.FIELD, ElementType.TYPE, ElementType.PACKAGE })
 public @interface Getter {
 
 }
