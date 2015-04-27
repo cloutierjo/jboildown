@@ -1,7 +1,5 @@
 package net.jcs.jboilerdowntest;
 
-import static org.junit.Assert.*;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -15,7 +13,7 @@ public class TestBasicITD2 {
 
 	@Test
 	public void callITD(){
-		test2.compareTo(null);
+		test2.getLol();
 	}
 
 	@Test
