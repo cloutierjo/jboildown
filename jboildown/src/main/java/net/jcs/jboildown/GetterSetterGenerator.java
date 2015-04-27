@@ -30,7 +30,7 @@ import com.thoughtworks.qdox.model.JavaPackage;
 public class GetterSetterGenerator extends AbstractMojo {
 
 	/**
-	 * @parameter expression="${project}"
+	 * @parameter property="project"
 	 * @required
 	 * @readonly
 	 * @since 1.0
