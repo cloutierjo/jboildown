@@ -6,14 +6,14 @@ import net.jcs.jboildown.annotation.Getter;
 import net.jcs.jboildown.annotation.Setter;
 
 @Getter
-public class Test2 {
+@Setter
+public class BasicTestClass {
 
 	/**
 	 * the data value
 	 */
-	private String data;
-	@Setter  
-	private boolean ips; 
-	private Boolean blas; 
-	private List<String> lol;
+	private String privateField;
+	protected boolean protectedField;
+	public Boolean publicField;
+	private List<String> listField;
 }
