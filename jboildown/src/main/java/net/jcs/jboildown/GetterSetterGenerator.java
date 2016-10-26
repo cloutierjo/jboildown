@@ -7,10 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.jcs.jboildown.annotation.Getter;
-import net.jcs.jboildown.annotation.Setter;
-import net.jcs.jboildown.data.Data;
-
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.project.MavenProject;
 import org.apache.velocity.VelocityContext;
@@ -22,6 +18,10 @@ import com.thoughtworks.qdox.model.JavaAnnotation;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaField;
 import com.thoughtworks.qdox.model.JavaPackage;
+
+import net.jcs.jboildown.annotation.Getter;
+import net.jcs.jboildown.annotation.Setter;
+import net.jcs.jboildown.data.Data;
 
 /**
  * @goal generate-sources
@@ -46,9 +46,9 @@ public class GetterSetterGenerator extends AbstractMojo {
 	 */
 	File outputDirectory;
 
-	Map<String, List<FieldObserver>> fieldObservers = new HashMap<String, List<FieldObserver>>();
-	Map<String, List<ClassObserver>> classObservers = new HashMap<String, List<ClassObserver>>();
-	List<DataExtractor> dataExtrators = new ArrayList<DataExtractor>();
+	Map<String, List<FieldObserver>> fieldObservers = new HashMap<>();
+	Map<String, List<ClassObserver>> classObservers = new HashMap<>();
+	List<DataExtractor> dataExtrators = new ArrayList<>();
 
 	@Override
 	public void execute() {
@@ -91,30 +91,30 @@ public class GetterSetterGenerator extends AbstractMojo {
 					pd.mkdirs();
 
 					File file = new File(pd, javaClass.getName() + "_jbd.aj");
-					FileWriter out = new FileWriter(file);
+					try (FileWriter out = new FileWriter(file)) {
 
-					data.setClassName(javaClass.getName());
-					data.setPackageName(javaClass.getPackageName());
+						data.setClassName(javaClass.getName());
+						data.setPackageName(javaClass.getPackageName());
 
-					Velocity.setProperty("input.encoding", "UTF-8");
-					Velocity.setProperty("output.encoding", "UTF-8");
-					Velocity.setProperty("resource.loader", "class");
-					Velocity.setProperty("class.resource.loader.description", "Velocity Classpath Resource Loader");
-					Velocity.setProperty("class.resource.loader.class", "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
+						Velocity.setProperty("input.encoding", "UTF-8");
+						Velocity.setProperty("output.encoding", "UTF-8");
+						Velocity.setProperty("resource.loader", "class");
+						Velocity.setProperty("class.resource.loader.description", "Velocity Classpath Resource Loader");
+						Velocity.setProperty("class.resource.loader.class", "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
 
-					Velocity.init();
-					VelocityContext context = new VelocityContext();
-					for (DataExtractor dataExtractor : dataExtrators) {
-						context.put("name", dataExtractor.getClass().getSimpleName());
-						context.put(dataExtractor.getClass().getSimpleName(), dataExtractor.getData());
-						data.addAllImport(dataExtractor.getImports());
+						Velocity.init();
+						VelocityContext context = new VelocityContext();
+						for (DataExtractor dataExtractor : dataExtrators) {
+							context.put("name", dataExtractor.getClass().getSimpleName());
+							context.put(dataExtractor.getClass().getSimpleName(), dataExtractor.getData());
+							data.addAllImport(dataExtractor.getImports());
+						}
+						context.put("baseData", data);
+
+						Velocity.getTemplate("template/main.vm").merge(context, out);
+
+						out.flush();
 					}
-					context.put("baseData", data);
-
-					Velocity.getTemplate("template/main.vm").merge(context, out);
-
-					out.flush();
-					out.close();
 					buildContext.refresh(file);
 					getLog().info(file.getCanonicalPath() + " generated");
 				}
@@ -128,7 +128,7 @@ public class GetterSetterGenerator extends AbstractMojo {
 		String annotationCanonicalName = annotation.getCanonicalName();
 		List<FieldObserver> fieldObserversList = fieldObservers.get(annotationCanonicalName);
 		if (fieldObserversList == null) {
-			fieldObserversList = new ArrayList<FieldObserver>();
+			fieldObserversList = new ArrayList<>();
 			fieldObservers.put(annotationCanonicalName, fieldObserversList);
 		}
 		fieldObserversList.add(fieldObserver);
@@ -139,7 +139,7 @@ public class GetterSetterGenerator extends AbstractMojo {
 		String annotationCanonicalName = annotation.getCanonicalName();
 		List<ClassObserver> classObserversList = classObservers.get(annotationCanonicalName);
 		if (classObserversList == null) {
-			classObserversList = new ArrayList<ClassObserver>();
+			classObserversList = new ArrayList<>();
 			classObservers.put(annotationCanonicalName, classObserversList);
 		}
 		classObserversList.add(classObserver);
