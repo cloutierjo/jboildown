@@ -14,6 +14,7 @@ public class TestBasicClassGeneration {
 	private static final String TEST_DATA = "test data";
 	private static final boolean TEST_BOLEAN_DATA = true;
 	private BasicTestClass basicTestClass;
+
 	@Before
 	public void setUp() throws Exception {
 		basicTestClass = new BasicTestClass();

@@ -1,7 +1,10 @@
 package net.jcs.jboildown;
 
 import java.io.File;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -88,10 +91,14 @@ public class GetterSetterGenerator extends AbstractMojo {
 				if (doGenerate) {
 					String packageName = javaClass.getPackageName();
 					File pd = new File(outputDirectory, packageName.replaceAll("\\.", "/"));
-					pd.mkdirs();
+					boolean dirCreated = pd.mkdirs();
+
+					if (!dirCreated) {
+						throw new Exception("Can't create output directory");
+					}
 
 					File file = new File(pd, javaClass.getName() + "_jbd.aj");
-					try (FileWriter out = new FileWriter(file)) {
+					try (Writer out = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8)) {
 
 						data.setClassName(javaClass.getName());
 						data.setPackageName(javaClass.getPackageName());
@@ -201,10 +208,8 @@ public class GetterSetterGenerator extends AbstractMojo {
 	private boolean hasDelta() {
 		for (Object srcPath : project.getCompileSourceRoots()) {
 			getLog().info((String) srcPath);
-			if (!((String) srcPath).contains("target")) {
-				if (buildContext.hasDelta(new File((String) srcPath))) {
-					return true;
-				}
+			if (!((String) srcPath).contains("target") && buildContext.hasDelta(new File((String) srcPath))) {
+				return true;
 			}
 		}
 		return false;

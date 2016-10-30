@@ -9,7 +9,7 @@ public class Data {
 	private Collection<String> imports;
 
 	public Data() {
-		imports = new HashSet<String>();
+		imports = new HashSet<>();
 	}
 
 	public String getPackageName() {

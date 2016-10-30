@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import net.jcs.jboildown.data.GSetterData;
-
 import com.thoughtworks.qdox.model.JavaField;
+
+import net.jcs.jboildown.data.GSetterData;
 
 public class GetterExtractor implements FieldObserver {
 
@@ -14,8 +14,8 @@ public class GetterExtractor implements FieldObserver {
 	private Collection<String> imports;
 
 	public GetterExtractor() {
-		datas = new ArrayList<GSetterData>();
-		imports = new ArrayList<String>();
+		datas = new ArrayList<>();
+		imports = new ArrayList<>();
 	}
 
 	@Override
