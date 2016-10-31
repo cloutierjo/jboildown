@@ -91,9 +91,7 @@ public class GetterSetterGenerator extends AbstractMojo {
 				if (doGenerate) {
 					String packageName = javaClass.getPackageName();
 					File pd = new File(outputDirectory, packageName.replaceAll("\\.", "/"));
-					boolean dirCreated = pd.mkdirs();
-
-					if (!dirCreated) {
+					if (!pd.exists() && !pd.mkdirs()) {
 						throw new Exception("Can't create output directory");
 					}
 
