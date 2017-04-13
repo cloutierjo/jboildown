@@ -67,5 +67,47 @@
 			<artifactId>aspectjrt</artifactId>
 			<version>1.8.4</version>
 		</dependency>
+		<dependency>
+			<groupId>org.gradle</groupId>
+			<artifactId>gradle-core</artifactId>
+			<scope>provided</scope>
+			<version>3.4.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.groovy</groupId>
+			<artifactId>groovy</artifactId>
+			<scope>provided</scope>
+			<version>2.4.10</version>
+		</dependency>
+		<dependency>
+			<groupId>org.gradle</groupId>
+			<artifactId>gradle-base-services-groovy</artifactId>
+			<scope>provided</scope>
+			<version>3.4.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.gradle</groupId>
+			<artifactId>gradle-base-services</artifactId>
+			<scope>provided</scope>
+			<version>3.4.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.gradle</groupId>
+			<artifactId>gradle-logging</artifactId>
+			<scope>provided</scope>
+			<version>3.4.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.gradle</groupId>
+			<artifactId>gradle-plugins</artifactId>
+			<scope>provided</scope>
+			<version>0.9-preview-3</version>
+		</dependency>
 	</dependencies>
+	<repositories>
+		<repository>
+			<id>repo.gradle.org</id>
+			<url>https://repo.gradle.org/gradle/libs-releases-local/</url>
+		</repository>
+	</repositories>
 </project>

@@ -10,11 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.maven.plugin.AbstractMojo;
-import org.apache.maven.project.MavenProject;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
-import org.sonatype.plexus.build.incremental.BuildContext;
 
 import com.thoughtworks.qdox.JavaProjectBuilder;
 import com.thoughtworks.qdox.model.JavaAnnotation;
@@ -24,57 +21,34 @@ import com.thoughtworks.qdox.model.JavaPackage;
 
 import net.jcs.jboildown.annotation.Getter;
 import net.jcs.jboildown.annotation.Setter;
+import net.jcs.jboildown.compatibility.BuildAdapter;
 import net.jcs.jboildown.data.Data;
 
-/**
- * @goal generate-sources
- * @phase generate-sources
- */
-public class GetterSetterGenerator extends AbstractMojo {
+public class GetterSetterGenerator {
 
-	/**
-	 * @parameter property="project"
-	 * @required
-	 * @readonly
-	 * @since 1.0
-	 */
-	MavenProject project;
+	private BuildAdapter build;
 
-	/** @component */
-	private BuildContext buildContext;
+	private Map<String, List<FieldObserver>> fieldObservers = new HashMap<>();
+	private Map<String, List<ClassObserver>> classObservers = new HashMap<>();
+	private List<DataExtractor> dataExtrators = new ArrayList<>();
 
-	/**
-	 * @parameter default-value="target/generated-sources/"
-	 * @required
-	 */
-	File outputDirectory;
+	public GetterSetterGenerator(BuildAdapter build) {
+		this.build = build;
+	}
 
-	Map<String, List<FieldObserver>> fieldObservers = new HashMap<>();
-	Map<String, List<ClassObserver>> classObservers = new HashMap<>();
-	List<DataExtractor> dataExtrators = new ArrayList<>();
-
-	@Override
 	public void execute() {
-		getLog().info("start generator");
-		if (hasDelta()) {
-			getLog().info("File change, run generator");
-			Data data = new Data();
-			addFieldObserver(new GetterExtractor(), Getter.class);
-			addFieldObserver(new SetterExtractor(), Setter.class);
-			doParsing(data);
-			getLog().info("generation completed");
-		} else {
-			getLog().info("no file changed");
-		}
-		project.addCompileSourceRoot(outputDirectory.getAbsolutePath());
+		Data data = new Data();
+		addFieldObserver(new GetterExtractor(), Getter.class);
+		addFieldObserver(new SetterExtractor(), Setter.class);
+		doParsing(data);
 	}
 
 	private void doParsing(Data data) {
 		try {
 			JavaProjectBuilder builder = new JavaProjectBuilder();
 
-			for (Object srcPath : project.getCompileSourceRoots()) {
-				builder.addSourceTree(new File((String) srcPath));
+			for (String srcPath : build.getCompileSourceRoots()) {
+				builder.addSourceTree(new File(srcPath));
 			}
 
 			for (JavaClass javaClass : builder.getClasses()) {
@@ -90,7 +64,7 @@ public class GetterSetterGenerator extends AbstractMojo {
 
 				if (doGenerate) {
 					String packageName = javaClass.getPackageName();
-					File pd = new File(outputDirectory, packageName.replaceAll("\\.", "/"));
+					File pd = new File(build.getOutputDirectory(), packageName.replaceAll("\\.", "/"));
 					if (!pd.exists() && !pd.mkdirs()) {
 						throw new Exception("Can't create output directory");
 					}
@@ -120,12 +94,12 @@ public class GetterSetterGenerator extends AbstractMojo {
 
 						out.flush();
 					}
-					buildContext.refresh(file);
-					getLog().info(file.getCanonicalPath() + " generated");
+					build.refresh(file);
+					build.getLog().info(file.getCanonicalPath() + " generated");
 				}
 			}
 		} catch (Exception e) {
-			getLog().error("General error", e);
+			build.getLog().error("General error", e);
 		}
 	}
 
@@ -201,15 +175,5 @@ public class GetterSetterGenerator extends AbstractMojo {
 			}
 		}
 		return doGenerate;
-	}
-
-	private boolean hasDelta() {
-		for (Object srcPath : project.getCompileSourceRoots()) {
-			getLog().info((String) srcPath);
-			if (!((String) srcPath).contains("target") && buildContext.hasDelta(new File((String) srcPath))) {
-				return true;
-			}
-		}
-		return false;
 	}
 }
