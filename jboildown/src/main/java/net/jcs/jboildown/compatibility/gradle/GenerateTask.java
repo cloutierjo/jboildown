@@ -21,7 +21,5 @@ public class GenerateTask extends DefaultTask {
 		GetterSetterGenerator getterSetterGenerator = new GetterSetterGenerator(build);
 		getterSetterGenerator.execute();
 		build.getLog().info("generation completed");
-		// SourceSetContainer sources = (SourceSetContainer) getProject().getProperties().get("sourceSets");
-		// sources.getByName("main").getJava().srcDir(build.getOutputDirectory());
 	}
 }

@@ -1,21 +1,21 @@
 package net.jcs.jboildown.compatibility.gradle;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import net.jcs.jboildown.compatibility.LogAdapter;
 
 public class GradleLogAdapter implements LogAdapter {
-
-	public GradleLogAdapter() {
-	}
+	Logger LOG = LoggerFactory.getLogger("jboildown");
 
 	@Override
 	public void info(String content) {
-		System.out.println(content);
+		LOG.info(content);
 	}
 
 	@Override
 	public void error(String content, Exception error) {
-		System.err.println(content);
-		error.printStackTrace(System.err);
+		LOG.error(content, error);
 	}
 
 }
